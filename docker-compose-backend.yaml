@@ -1,0 +1,53 @@
+version: "3.4"
+
+services:
+  udp2ros:
+    image: gst-ros-bridge:ros2
+    networks:
+      ipcnet:
+        ipv4_address: 172.33.100.2
+    ports:
+      - "7001:7001/udp"
+    environment:
+      - GST_PLUGIN_PATH=install/gst_bridge/lib/gst_bridge
+    command: >
+      bash -c "
+      source install/setup.bash && gst-launch-1.0 udpsrc port=7001 ! queue ! rosimagesink ros-topic=/image_proc_chain/io/image_in
+      "
+  ipc:
+    image: ipc:humble
+    networks:
+      ipcnet:
+        ipv4_address: 172.33.100.3
+    command: >
+      ros2 launch image_proc_chain image_proc_chain.launch.py
+
+  ros2web:
+    image: rosbridge:humble
+    networks:
+      ipcnet:
+        ipv4_address: 172.33.100.4
+    ports:
+      - "9090:9090/tcp"
+    command: >
+      ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+
+
+  test:
+    image: ipc:humble
+    networks:
+      ipcnet:
+        ipv4_address: 172.33.100.100
+    command: >
+      ros2 topic echo --once /image_proc_chain/io/image_out
+
+
+networks:
+  ipcnet:
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.33.100.0/24
+          gateway: 172.33.100.1

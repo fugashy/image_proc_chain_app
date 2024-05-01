@@ -1,0 +1,19 @@
+{
+  "name": "ipcfrontend",
+  "version": "0.0.0",
+  "description": "A user interface to control image_proc_chain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ROS2",
+    "nodejs",
+    "roslib"
+  ],
+  "author": "fugashy",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "roslib": "^1.4.1"
+  }
+}
