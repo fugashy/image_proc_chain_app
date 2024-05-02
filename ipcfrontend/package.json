@@ -2,7 +2,7 @@
   "name": "ipcfrontend",
   "version": "0.0.0",
   "description": "A user interface to control image_proc_chain",
-  "main": "index.js",
+  "main": "public/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +14,8 @@
   "author": "fugashy",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "express": "^4.19.2",
+    "path": "^0.12.7",
     "roslib": "^1.4.1"
   }
 }
