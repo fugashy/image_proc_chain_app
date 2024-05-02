@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROS Image Viewer</title>
+</head>
+<body>
+  <!-- 画像を表示するためのimg要素 -->
+  <canvas id="imageCanvas" width="640", height="480"></canvas>
+
+  <!-- ROSLIB.jsなどのスクリプトを読み込む -->
+  <script
+    type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js">
+  </script>
+
+  <script
+      type="text/javascript">
+    const ros = new ROSLIB.Ros({
+      url : 'ws://localhost:9090'  // ROSのWebSocketサーバーのURL
+    });
+
+    const imageTopic = new ROSLIB.Topic({
+      ros : ros,
+      name : '/image_proc_chain/io/image_out',
+      messageType : 'sensor_msgs/Image'
+    });
+
+    imageTopic.subscribe(function(message) {
+      # console.log(`Got an image message: ${message.data}`);
+      console.log(`decode data: ${atob(message.data)}`);
+      // イメージデータを取得してHTMLに表示する
+      // const imageData = atob(message.data);
+//    var canvas = document.getElementById('imageCanvas');
+//    var ctx = canvas.getContext("2d");
+//    var img = new Image();
+//    img.onload = function() {
+//      ctx.drawImage(img, 0, 0);
+//    };
+//    img.src = "data:image/jpeg;base64" + message.data; // HTMLのimg要素に画像データを表示
+    });
+  </script>
+</body>
+</html>
+

@@ -11,9 +11,10 @@ services:
     environment:
       - GST_PLUGIN_PATH=install/gst_bridge/lib/gst_bridge
     command: >
-      bash -c "
-      source install/setup.bash && gst-launch-1.0 udpsrc port=7001 ! queue ! rosimagesink ros-topic=/image_proc_chain/io/image_in
-      "
+      bash -c '
+      source install/setup.bash && gst-launch-1.0 udpsrc port=7001 caps="application/x-rtp"  ! rtpjpegdepay ! jpegdec ! videoconvert! rosimagesink ros-topic=/image_proc_chain/io/image_in
+      '
+
   ipc:
     image: ipc:humble
     networks:
@@ -22,7 +23,7 @@ services:
     command: >
       ros2 launch image_proc_chain image_proc_chain.launch.py
 
-  ros2web:
+  rosbridge:
     image: rosbridge:humble
     networks:
       ipcnet:
@@ -32,6 +33,15 @@ services:
     command: >
       ros2 launch rosbridge_server rosbridge_websocket_launch.xml
 
+  wvs:
+    image: web_video_server:humble
+    networks:
+      ipcnet:
+        ipv4_address: 172.33.100.5
+    ports:
+      - "9091:8080/tcp"
+    command: >
+      ros2 run web_video_server web_video_server
 
   test1:
     image: ipc:humble
