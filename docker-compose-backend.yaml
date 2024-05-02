@@ -33,13 +33,21 @@ services:
       ros2 launch rosbridge_server rosbridge_websocket_launch.xml
 
 
-  test:
+  test1:
     image: ipc:humble
     networks:
       ipcnet:
         ipv4_address: 172.33.100.100
     command: >
       ros2 topic echo --once /image_proc_chain/io/image_out
+
+  test2:
+    image: ipc:humble
+    networks:
+      ipcnet:
+        ipv4_address: 172.33.100.101
+    command: >
+      ros2 topic pub /my_topic std_msgs/String "data: 'Hello world!'" -r 1
 
 
 networks:
